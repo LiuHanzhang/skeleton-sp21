@@ -107,4 +107,27 @@ public class TestUpOnly extends TestUtils {
         checkChanged(Side.NORTH, true, changed);
         checkModel(after, 4, 0, prevBoard, Side.NORTH);
     }
+
+    @Test
+    /** A special case*/
+    public void testUpSpecial() {
+        int[][] before = new int[][] {
+                {0, 0, 2, 0},
+                {0, 0, 4, 0},
+                {0, 0, 2, 0},
+                {0, 0, 0, 0},
+        };
+        int[][] after = new int[][] {
+                {0, 0, 2, 0},
+                {0, 0, 4, 0},
+                {0, 0, 2, 0},
+                {0, 0, 0, 0},
+        };
+
+        updateModel(before, 0, 0, false);
+        String prevBoard = model.toString();
+        boolean changed = model.tilt(Side.NORTH);
+        checkChanged(Side.NORTH, false, changed);
+        checkModel(after, 0, 0, prevBoard, Side.NORTH);
+    }
 }

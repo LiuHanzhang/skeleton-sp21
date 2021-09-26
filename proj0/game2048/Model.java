@@ -94,6 +94,43 @@ public class Model extends Observable {
         setChanged();
     }
 
+    /**
+     * A helper function for tiltColumn
+     * return if there are other tilts between row and moveToRow
+     */
+    private boolean noOtherTile (int col, int row, int moveToRow) {
+        for (int i = row + 1; i < moveToRow; i++)
+            if (board.tile(col, i) != null)
+                return false;
+        return true;
+    }
+
+    /**
+     * A helper function for tilt
+     * Tile one column with north direction
+     * return if the column has been changed
+     */
+    private boolean tiltColumn(int col) {
+        boolean[] merged = new boolean[size()];
+        boolean changed = false;
+        for(int row = size()-2; row >= 0; row--) {
+            if (board.tile(col, row) == null)
+                continue;
+            for(int moveToRow = size()-1; moveToRow > row; moveToRow--) {
+                if (board.tile(col, moveToRow) == null ||
+                        (board.tile(col, moveToRow).value() == board.tile(col, row).value()
+                                && !merged[moveToRow] && noOtherTile(col, row, moveToRow))) {
+                    merged[moveToRow] = board.move(col, moveToRow, board.tile(col, row));
+                    if(merged[moveToRow])
+                        score += board.tile(col, moveToRow).value();
+                    changed = true;
+                    break;
+                }
+            }
+        }
+        return changed;
+    }
+
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -113,6 +150,12 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+
+        board.setViewingPerspective(side);
+        for (int col = 0; col < size(); col++)
+            //TRAP: Put tiltColumn in the front, or it may not be executed
+            changed = tiltColumn(col) || changed;
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
@@ -137,7 +180,10 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        for (int i = 0; i < b.size(); i++)
+            for (int j = 0; j < b.size(); j++)
+                if (b.tile(i, j) == null)
+                    return true;
         return false;
     }
 
@@ -147,7 +193,25 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        for (int i = 0; i < b.size(); i++)
+            for (int j = 0; j < b.size(); j++)
+                if (b.tile(i, j) != null && b.tile(i, j).value() == MAX_PIECE)
+                    return true;
+        return false;
+    }
+
+    /**
+     * Return true if any adjacent tiles has same values
+     * b must be a board without empty space
+     */
+    private static boolean adjacentSameValueExists(Board b) {
+        int size = b.size();
+        for (int row = 0; row < size; row++)
+            for (int col = 0; col < size; col++) {
+                if ((col + 1 < size && b.tile(col, row).value() == b.tile(col + 1, row).value())
+                        || (row + 1 < size && b.tile(col, row).value() == b.tile(col, row + 1).value()))
+                    return true;
+            }
         return false;
     }
 
@@ -158,8 +222,7 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
-        return false;
+        return emptySpaceExists(b) || adjacentSameValueExists(b);
     }
 
 
