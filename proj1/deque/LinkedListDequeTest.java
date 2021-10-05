@@ -149,4 +149,18 @@ public class LinkedListDequeTest {
             assertEquals("Should have the same value", i, (int)l.getRecursive(i));
         }
     }
+
+    @Test
+    /* Test equals and iterator across LinkedListDeque and ArrayDeque*/
+    public void equalsTest() {
+        LinkedListDeque<Integer> l = new LinkedListDeque<Integer>();
+        for (int i = 0; i < 1000; i++)
+            l.addLast(i);
+        ArrayDeque<Integer> a = new ArrayDeque<Integer>();
+        for (int i = 0; i < 1000; i++)
+            a.addLast(i);
+        assertTrue(l.equals(a));
+        l.removeLast();
+        assertFalse(a.equals(l));
+    }
 }

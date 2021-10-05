@@ -1,6 +1,8 @@
 package deque;
 
-public class LinkedListDeque<T> {
+import java.util.Iterator;
+
+public class LinkedListDeque<T> implements Deque<T> {
     private class Node {
         public T item;
         public Node prev;
@@ -28,6 +30,7 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
+    @Override
     public void addFirst(T item) {
         Node newNode = new Node(item, sentFront, sentFront.next);
         sentFront.next = newNode;
@@ -35,6 +38,7 @@ public class LinkedListDeque<T> {
         ++size;
     }
 
+    @Override
     public void addLast(T item) {
         Node newNode = new Node(item, sentBack.prev, sentBack);
         sentBack.prev = newNode;
@@ -42,6 +46,7 @@ public class LinkedListDeque<T> {
         ++size;
     }
 
+    @Override
     public T removeFirst() {
         if(isEmpty())
             return null;
@@ -54,6 +59,7 @@ public class LinkedListDeque<T> {
         return elem;
     }
 
+    @Override
     public T removeLast() {
         if(isEmpty())
             return null;
@@ -66,6 +72,7 @@ public class LinkedListDeque<T> {
         return elem;
     }
 
+    @Override
     public T get(int index) {
         if(index < 0 || size() <= index)
             return null;
@@ -91,14 +98,12 @@ public class LinkedListDeque<T> {
             return getRecursiveHelper(index, sentFront.next);
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         Node curr = sentFront.next;
         while(curr != null) {
@@ -107,5 +112,49 @@ public class LinkedListDeque<T> {
             curr = curr.next;
         }
         System.out.print('\n');
+    }
+
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private Node curr = sentFront.next;
+
+        @Override
+        public boolean hasNext() {
+            return curr != sentBack;
+        }
+
+        @Override
+        public T next() {
+            T item = curr.item;
+            curr = curr.next;
+            return item;
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedListDequeIterator();
+    }
+
+    // NOTE: https://stackoverflow.com/questions/24016962/java8-why-is-it-forbidden-to-define-a-default-method-for-a-method-from-java-lan/24026292
+    @Override
+    public boolean equals(Object o) {
+        if(o == null)
+            return false;
+        if(o == this)
+            return true;
+        if(!(o instanceof Deque))
+            return false;
+        Deque<T> other = (Deque<T>)o;
+        if(size() != other.size())
+            return false;
+        Iterator<T> iter1 = iterator();
+        Iterator<T> iter2 = other.iterator();
+        while(iter1.hasNext()) {
+            T curr1 = iter1.next();
+            T curr2 = iter2.next();
+            if(!curr1.equals(curr2))
+                return false;
+        }
+        return true;
     }
 }

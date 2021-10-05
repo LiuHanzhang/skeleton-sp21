@@ -1,6 +1,8 @@
 package deque;
 
-public class ArrayDeque<T> {
+import java.util.Iterator;
+
+public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size;
     private int capacity;
@@ -27,10 +29,7 @@ public class ArrayDeque<T> {
         return (capacity >= 16) && ((size - 1) * LOAD_FACTOR < capacity);
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public int size() {
         return size;
     }
@@ -51,6 +50,7 @@ public class ArrayDeque<T> {
         items = a;
     }
 
+    @Override
     public void addFirst(T item) {
         if(full())
             resize(capacity * RESIZE_FACTOR);
@@ -59,6 +59,7 @@ public class ArrayDeque<T> {
         ++size;
     }
 
+    @Override
     public void addLast(T item) {
         if(full())
             resize(capacity * RESIZE_FACTOR);
@@ -67,6 +68,7 @@ public class ArrayDeque<T> {
         ++size;
     }
 
+    @Override
     public T removeFirst() {
         if(isEmpty())
             return null;
@@ -79,6 +81,7 @@ public class ArrayDeque<T> {
         return elem;
     }
 
+    @Override
     public T removeLast() {
         if(isEmpty())
             return null;
@@ -91,6 +94,7 @@ public class ArrayDeque<T> {
         return elem;
     }
 
+    @Override
     public T get(int index) {
         if(index < 0 || size() <= index)
             return null;
@@ -98,11 +102,55 @@ public class ArrayDeque<T> {
             return items[(nextFirst + 1 + index) % capacity];
     }
 
+    @Override
     public void printDeque() {
         for(int curr = (nextFirst + 1) % capacity; curr != nextLast; curr = (curr + 1) % capacity) {
             System.out.print(items[curr]);
             System.out.print(' '); //TODO: Should I strip the last space?
         }
         System.out.print('\n');
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int pos = 0;
+
+        @Override
+        public boolean hasNext() {
+            return pos < size;
+        }
+
+        @Override
+        public T next() {
+            T item = get(pos);
+            ++pos;
+            return item;
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null)
+            return false;
+        if(o == this)
+            return true;
+        if(!(o instanceof Deque))
+            return false;
+        Deque<T> other = (Deque<T>)o;
+        if(size() != other.size())
+            return false;
+        Iterator<T> iter1 = iterator();
+        Iterator<T> iter2 = other.iterator();
+        while(iter1.hasNext()) {
+            T curr1 = iter1.next();
+            T curr2 = iter2.next();
+            if(!curr1.equals(curr2))
+                return false;
+        }
+        return true;
     }
 }
