@@ -12,5 +12,9 @@ public interface Deque<T> {
     public T removeLast();
     public T get(int index);
 
-    public Iterator<T> iterator();
+    // NOTE: This interface is not declared in autograder
+    //public Iterator<T> iterator();
+    // NOTE: https://stackoverflow.com/questions/24016962/java8-why-is-it-forbidden-to-define-a-default-method-for-a-method-from-java-lan/24026292
+    // @Override
+    // default public boolean equals(Object o) {...}
 }
