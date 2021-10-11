@@ -44,7 +44,6 @@ public class Main {
 
         CapersRepository.setupPersistence();
         String text;
-        Dog dog;
         switch (args[0]) {
         case "story":
             /* This call has been handled for you. The rest will be similar. */
