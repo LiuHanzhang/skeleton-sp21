@@ -1,0 +1,31 @@
+String Length = 100
+
+InsertInOrderSpeedTest:
+n = 100,000
+    ULLMap          STACKOVERFLOW
+    BSTMap          12.72
+    Java TreeMap    0.13s
+    Java HashMap    0.05s
+n = 1,000,000
+    ULLMap          STACKOVERFLOW
+    BSTMap          122.85s
+    Java TreeMap    0.79s
+    Java HashMap    0.60s
+
+InsertRandomOrderSpeedTest:
+String Length = 100
+n = 100,000
+    ULLMap          STACKOVERFLOW
+    BSTMap          0.21s
+    Java TreeMap    0.20s
+    Java HashMap    0.14s
+n = 1,000,000
+    ULLMap          STACKOVERFLOW
+    BSTMap          2.35s
+    Java TreeMap    2.18s
+    Java HashMap    1.28s
+n = 10,000,000
+    ULLMap          STACKOVERFLOW
+    BSTMap          39.85s
+    Java TreeMap    33.96s
+    Java HashMap    16.00s
