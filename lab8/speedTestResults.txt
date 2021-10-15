@@ -1,0 +1,52 @@
+InsertRandomSpeedTest
+String Length 100
+n = 1,000,000
+    MyHashMap: 1.98s
+    Java HashMap: 1.45s
+n = 10,000,000
+    MyHashMap: 23.52s
+    Java HashMap: 16.38s
+
+String Length 3
+n = 1,000,000
+    MyHashMap: 0.2s
+    Java HashMap: 0.13s
+n = 10,000,000
+    MyHashMap: 1.02s
+    Java HashMap: 0.65s
+
+
+InsertInOrderSpeedTest
+String Length (Lexicographically Increasing Order)
+n = 1,000,000
+    MyHashMap: 0.88s
+    Java HashMap: 0.57s
+n = 10,000,000
+    MyHashMap: 7.42s
+    Java HashMap: 4.83s
+
+
+
+ BucketsSpeedTest
+
+ String Length 100
+ n = 100,000
+    MyHashMapALBuckets: 0.23 sec
+    MyHashMapLLBuckets: 0.24 sec
+    MyHashMapTSBuckets: 0.31 sec
+    MyHashMapHSBuckets: 0.29 sec
+    MyHashMapPQBuckets: 0.30 sec
+ n = 1,000,000
+    MyHashMapALBuckets: 2.02 sec
+    MyHashMapLLBuckets: 2.10 sec
+    MyHashMapTSBuckets: 3.07 sec
+    MyHashMapHSBuckets: 3.00 sec
+    MyHashMapPQBuckets: 3.54 sec
+
+ String Length 10
+ n = 1,000,000
+    MyHashMapALBuckets: 1.22 sec
+    MyHashMapLLBuckets: 1.38 sec
+    MyHashMapTSBuckets: 1.89 sec
+    MyHashMapHSBuckets: 1.90 sec
+    MyHashMapPQBuckets: 1.79 sec
